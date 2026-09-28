@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar'
 import Recipes from '../pages/Recipes'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
-import RecipeDetail from '../pages/RecipeDetail'
+import RecipeDetailS from '../pages/RecipeDetails'
 import EditRecipe from '../pages/EditRecipe'
 import CreateRecipe from '../pages/CreateRecipe'
 
@@ -18,7 +18,7 @@ export default function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/recipes' element={<Recipes />} />
-                <Route path='/recipes/:recipeId' element={<RecipeDetail />} />
+                <Route path='/recipes/:recipeId' element={<RecipeDetailS />} />
                 <Route path='/recipes/:recipeId/edit' element={<EditRecipe />} />
                 <Route path='/recipes/create' element={<CreateRecipe />} />
             </Routes>

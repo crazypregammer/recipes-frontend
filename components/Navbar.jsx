@@ -16,39 +16,66 @@ export default function Navbar() {
 
       {/* Logo */}
       <Link to="/" className="navbar-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Recipe_Unlimited_logo.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" alt="Logo" />
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Recipe_Unlimited_logo.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" 
+          alt="Logo" 
+        />
       </Link>
 
       {/* Links */}
       <ul className="navbar-links">
-        {!isLoggedIn ? (
+
+        {/* 🔹 Usuario NO logueado */}
+        {!isLoggedIn && (
           <>
             <li>
               <NavLink to="/login" className="nav-item">
                 Login
               </NavLink>
             </li>
+
             <li>
               <NavLink to="/register" className="nav-item">
                 Register
               </NavLink>
             </li>
-          </>
-        ) : (
-          <>
+
             <li>
-                <Link to="/recipes">Recipes</Link>
-            </li>
-            <li>
-                <Link to={`/recipes/create`}>Create a recipe</Link>
-            </li>
-            <li>
-              <Link className="logout-btn" onClick={handleLogout}>
-                Logout
-              </Link>
+              <NavLink to="/recipes" className="nav-item">
+                Recipes
+              </NavLink>
             </li>
           </>
         )}
+
+        {/* 🔹 Usuario logueado */}
+        {isLoggedIn && (
+          <>
+            <li>
+              <NavLink to="/recipes" className="nav-item">
+                Recipes
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink to="/recipes/create" className="nav-item">
+                Create Recipe
+              </NavLink>
+            </li>
+
+            {/* Opcional: mostrar el nombre del usuario */}
+            <li className="welcome">
+              Hi, {user?.username || user?.name}
+            </li>
+
+            <li>
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
+        )}
+
       </ul>
     </nav>
   );

@@ -1,3 +1,5 @@
+
+
 img {
   width: 200px;
   height: 200px;
@@ -8,11 +10,15 @@ img {
   height: 50px;
 }
 
+
 .recipes-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 50px;
+  .recipe-item {
+    margin: 5px;
+  }
   .actions {
     text-align: center;
   }
@@ -22,21 +28,18 @@ img {
 }
 
 .home-container {
-  padding: 40px;
   text-align: center;
-  min-height: 100vh;
+  
 }
 
 /* HERO SECTION */
 .hero {
   padding: 70px 20px;
   border-radius: 20px;
-  margin-bottom: 50px;
 }
 
 .hero-title {
   font-size: 3rem;
-  margin-bottom: 10px;
   font-weight: 800;
   letter-spacing: 2px;
 }
@@ -119,6 +122,15 @@ a:hover {
   display: flex;
   flex-direction: column;
 }
+
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+
 
 form {
   display: flex;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { createRecipeService } from "../services/recipeService";
 
 export default function CreateRecipe() {
   const navigate = useNavigate();
@@ -9,34 +9,27 @@ export default function CreateRecipe() {
   const [img, setImg] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
+  const [category, setCategory] = useState("");
+  const [time, setTime] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const storedToken = localStorage.getItem("authToken");
+    const recipeData = {
+      title,
+      img,
+      category,
+      time,
+      ingredients: ingredients.split(",").map((i) => i.trim()),
+      steps: steps.split(".").map((s) => s.trim()).filter((s) => s !== "")
+    };
 
-    axios.post(
-      "http://localhost:5005/api/recipes",
-      {
-        title,
-        img,
-        ingredients: ingredients.split(",").map((i) => i.trim()),
-        steps: steps.split(".").map((s) => s.trim()).filter((s) => s !== "")
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${storedToken}`
-        }
-      }
-    )
-    .then((response) => {
-      console.log("Recipe created:", response.data);
-      navigate("/recipes");
-    })
-    .catch((error) => {
-      console.log(error);
-      alert(error.response?.data?.message || "Error creating recipe");
-    });
+    createRecipeService(recipeData)
+      .then(() => navigate("/recipes"))
+      .catch((error) => {
+        console.log(error);
+        alert(error.response?.data?.message || "Error creating recipe");
+      });
   };
 
   return (
@@ -44,6 +37,7 @@ export default function CreateRecipe() {
       <h1>Create Recipe</h1>
 
       <form onSubmit={handleSubmit}>
+
         <label>Title</label>
         <input
           type="text"
@@ -58,6 +52,20 @@ export default function CreateRecipe() {
           onChange={(e) => setImg(e.target.value)}
         />
 
+        <label>Category</label>
+        <input
+          type="text"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
+
+        <label>Time</label>
+        <input
+          type="text"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+        />
+
         <label>Ingredients (separated by commas)</label>
         <input
           type="text"
@@ -70,11 +78,13 @@ export default function CreateRecipe() {
           value={steps}
           onChange={(e) => setSteps(e.target.value)}
         />
+
         <div>
-            <button type="submit">Create</button>
-            <button type="button" onClick={() => navigate(-1)}>Back</button>
+          <button type="submit">Create</button>
+          <button type="button" onClick={() => navigate(-1)}>Back</button>
         </div>
-        </form>
+
+      </form>
     </div>
   );
 }
