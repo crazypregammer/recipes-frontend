@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getRecipeService, editRecipeService } from "../services/recipeService";
 
+
 export default function EditRecipe() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
 
   const [img, setImg] = useState("");
   const [title, setTitle] = useState("");
-  const [ingredients, setIngredients] = useState(""); // string
-  const [steps, setSteps] = useState(""); // string
+  const [ingredients, setIngredients] = useState("");
+  const [steps, setSteps] = useState("");
   const [category, setCategory] = useState("");
   const [time, setTime] = useState("");
 
@@ -22,11 +23,8 @@ export default function EditRecipe() {
 
         setImg(recipe.img);
         setTitle(recipe.title);
-
-        // Convertir arrays → string
         setIngredients(recipe.ingredients.join(", "));
         setSteps(recipe.steps.join(". "));
-
         setCategory(recipe.category);
         setTime(recipe.time);
 
@@ -46,36 +44,28 @@ export default function EditRecipe() {
       title,
       category,
       time,
-
-      // Convertir string → array
-      ingredients: ingredients
-        .split(",")
-        .map((i) => i.trim())
-        .filter((i) => i !== ""),
-
-      steps: steps
-        .split(".")
-        .map((s) => s.trim())
-        .filter((s) => s !== "")
+      ingredients: ingredients.split(",").map((i) => i.trim()).filter((i) => i !== ""),
+      steps: steps.split(".").map((s) => s.trim()).filter((s) => s !== "")
     };
 
     editRecipeService(recipeId, updatedRecipe)
-      .then(() => navigate("/recipes"))
+      .then(() => navigate(`/recipes/${recipeId}`))
       .catch((err) => console.log(err));
   };
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="edit-recipe">
-      <h1>Edit Recipe</h1>
+    <div className="edit-container">
+      <h1 className="title">Edit Recipe</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
 
         <label>Image URL</label>
         <input
           type="text"
           value={img}
+          placeholder="https://example.com/image.jpg"
           onChange={(e) => setImg(e.target.value)}
         />
 
@@ -83,6 +73,7 @@ export default function EditRecipe() {
         <input
           type="text"
           value={title}
+          placeholder="Chocolate Cake..."
           onChange={(e) => setTitle(e.target.value)}
         />
 
@@ -90,6 +81,7 @@ export default function EditRecipe() {
         <input
           type="text"
           value={category}
+          placeholder="Dessert, Italian..."
           onChange={(e) => setCategory(e.target.value)}
         />
 
@@ -97,24 +89,29 @@ export default function EditRecipe() {
         <input
           type="text"
           value={time}
+          placeholder="30 min"
           onChange={(e) => setTime(e.target.value)}
         />
 
-        <label>Ingredients (separated by commas)</label>
+        <label>Ingredients (comma separated)</label>
         <input
           type="text"
           value={ingredients}
+          placeholder="Flour, Eggs, Sugar..."
           onChange={(e) => setIngredients(e.target.value)}
         />
 
         <label>Steps (separated by periods)</label>
         <textarea
           value={steps}
+          placeholder="Mix ingredients. Bake for 20 minutes..."
           onChange={(e) => setSteps(e.target.value)}
         />
 
-        <button type="submit">Save Changes</button>
-        <button type="button" onClick={() => navigate(-1)}>Back</button>
+        <div className="buttons">
+          <button type="submit" className="btn-primary">Save Changes</button>
+          <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
+        </div>
 
       </form>
     </div>

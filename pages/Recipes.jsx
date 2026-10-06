@@ -26,23 +26,24 @@ export default function Recipes() {
   };
 
   return (
-    <div>
-      <h1>Recipes</h1>
-      <div className="recipes-container">
-        {recipes.map((recipe) => (
-          <div key={recipe._id} className="recipe-item">
+    <div className="recipes-page">
+      <h1 className="recipes-title">Recipes</h1>
 
-            <Link to={`/recipes/${recipe._id}`}>
+      <div className="recipes-grid">
+        {recipes.map((recipe) => (
+          <div key={recipe._id} className="recipe-card-wrapper">
+
+            <Link to={`/recipes/${recipe._id}`} className="recipe-link">
               <RecipeCard recipe={recipe} />
             </Link>
 
             {isLoggedIn && (
-              <div className="actions">
+              <div className="card-actions">
                 <Link to={`/recipes/${recipe._id}/edit`}>
-                  <button>Edit</button>
+                  <button className="btn-primary">Edit</button>
                 </Link>
 
-                <button onClick={() => handleDelete(recipe._id)}>
+                <button className="btn-secondary" onClick={() => handleDelete(recipe._id)}>
                   Delete
                 </button>
               </div>

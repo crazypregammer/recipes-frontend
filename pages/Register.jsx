@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerService } from "../services/authService";
 
@@ -17,35 +17,53 @@ export default function Register() {
     }
 
     registerService({ username, email, password })
-  .then(() => {
-    navigate("/login");   // ✔ Lo más usado
-  })
-  .catch((error) => {
-    console.log(error);
-    alert(error.response?.data?.message || "Error registering");
-  });
-
+      .then(() => navigate("/login"))
+      .catch((error) => {
+        console.log(error);
+        alert(error.response?.data?.message || "Error registering");
+      });
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
+    <div className="auth-container">
+      <h1 className="auth-title">Register</h1>
+
+      <form className="auth-form" onSubmit={handleRegister}>
         <label>Username</label>
-        <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+        <input
+          type="text"
+          value={username}
+          placeholder="Your username..."
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
         <label>Email</label>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input
+          type="email"
+          value={email}
+          placeholder="you@example.com"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <label>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        <input
+          type="password"
+          value={password}
+          placeholder="••••••••"
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         <label>Verify password</label>
-        <input type="password" value={verifyPassword} onChange={e => setVerifyPassword(e.target.value)} />
+        <input
+          type="password"
+          value={verifyPassword}
+          placeholder="••••••••"
+          onChange={(e) => setVerifyPassword(e.target.value)}
+        />
 
-        <div>
-          <button type="submit">Register</button>
-          <button type="button" onClick={() => navigate(-1)}>Back</button>
+        <div className="auth-buttons">
+          <button type="submit" className="btn-primary">Register</button>
+          <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
       </form>
     </div>

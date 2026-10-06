@@ -8,16 +8,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const { logInUser } = useContext(AuthContext);   // ← ESTO FALTABA
+  const { logInUser } = useContext(AuthContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     loginService({ username, password })
       .then((response) => {
         const token = response.data.authToken;
-
-        logInUser(token);   // ← ahora sí funciona
-
+        logInUser(token);
         navigate("/recipes");
       })
       .catch((error) => {
@@ -27,14 +26,15 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="auth-container">
+      <h1 className="auth-title">Login</h1>
 
-      <form onSubmit={handleLogin}>
+      <form className="auth-form" onSubmit={handleLogin}>
         <label>Username</label>
         <input
           type="text"
           value={username}
+          placeholder="Your username..."
           onChange={(e) => setUsername(e.target.value)}
         />
 
@@ -42,12 +42,13 @@ export default function Login() {
         <input
           type="password"
           value={password}
+          placeholder="••••••••"
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <div>
-          <button type="submit">Login</button>
-          <button type="button" onClick={() => navigate(-1)}>Back</button>
+        <div className="auth-buttons">
+          <button type="submit" className="btn-primary">Login</button>
+          <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
       </form>
     </div>

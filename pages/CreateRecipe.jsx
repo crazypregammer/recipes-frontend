@@ -33,15 +33,16 @@ export default function CreateRecipe() {
   };
 
   return (
-    <div>
-      <h1>Create Recipe</h1>
+    <div className="create-container">
+      <h1 className="title">Create Recipe</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
 
         <label>Title</label>
         <input
           type="text"
           value={title}
+          placeholder="Chocolate Cake..."
           onChange={(e) => setTitle(e.target.value)}
         />
 
@@ -49,6 +50,7 @@ export default function CreateRecipe() {
         <input
           type="text"
           value={img}
+          placeholder="https://example.com/image.jpg"
           onChange={(e) => setImg(e.target.value)}
         />
 
@@ -56,6 +58,7 @@ export default function CreateRecipe() {
         <input
           type="text"
           value={category}
+          placeholder="Dessert, Italian..."
           onChange={(e) => setCategory(e.target.value)}
         />
 
@@ -63,25 +66,28 @@ export default function CreateRecipe() {
         <input
           type="text"
           value={time}
+          placeholder="30 min"
           onChange={(e) => setTime(e.target.value)}
         />
 
-        <label>Ingredients (separated by commas)</label>
+        <label>Ingredients (comma separated)</label>
         <input
           type="text"
           value={ingredients}
+          placeholder="Flour, Eggs, Sugar..."
           onChange={(e) => setIngredients(e.target.value)}
         />
 
-        <label>Steps (separate each step with a period)</label>
+        <label>Steps (separate with periods)</label>
         <textarea
           value={steps}
+          placeholder="Mix ingredients. Bake for 20 minutes..."
           onChange={(e) => setSteps(e.target.value)}
         />
 
-        <div>
-          <button type="submit">Create</button>
-          <button type="button" onClick={() => navigate(-1)}>Back</button>
+        <div className="buttons">
+          <button type="submit" className="btn-primary">Create</button>
+          <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
 
       </form>

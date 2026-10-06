@@ -15,12 +15,13 @@ export default function Navbar() {
     <nav className="navbar">
 
       {/* Logo */}
-      <Link to="/">Home</Link>
+      <Link to="/" className="navbar-logo">
+        RecipeHub
+      </Link>
 
       {/* Links */}
       <ul className="navbar-links">
 
-        {/* 🔹 Usuario NO logueado */}
         {!isLoggedIn && (
           <>
             <li>
@@ -37,7 +38,6 @@ export default function Navbar() {
           </>
         )}
 
-        {/* 🔹 Usuario logueado */}
         {isLoggedIn && (
           <>
             <li>
@@ -52,9 +52,8 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {/* Opcional: mostrar el nombre del usuario */}
             <li className="welcome">
-              Hi, {user?.username || user?.name}
+              Hi, {user?.username}
             </li>
 
             <li>

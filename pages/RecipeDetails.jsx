@@ -52,52 +52,70 @@ export default function RecipeDetails() {
   if (!recipe) return <p>Recipe not found</p>;
 
   return (
-    <div className="recipe-details">
+    <div className="details-container">
 
-      <h2>{recipe.title}</h2>
+      <h2 className="details-title">{recipe.title}</h2>
 
-      <img src={recipe.img} alt={recipe.title} className="recipe-image" />
+      <img src={recipe.img} alt={recipe.title} className="details-image" />
 
-      <div className="recipe-meta">
+      <div className="details-meta">
         <p><strong>Category:</strong> {recipe.category}</p>
         <p><strong>Time:</strong> {recipe.time}</p>
       </div>
 
       {recipe.creator && (
-        <p><strong>Creator:</strong> {recipe.creator.username}</p>
+        <p className="details-creator">
+          <strong>Creator:</strong> {recipe.creator.username}
+        </p>
       )}
 
-      <h3>Ingredients</h3>
-      <ul>
-        {recipe.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
-      </ul>
+      <div className="section">
+        <h3>Ingredients</h3>
+        <ul className="ingredients-list">
+          {recipe.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
+        </ul>
+      </div>
 
-      <h3>Steps</h3>
-      <ol>
-        {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
-      </ol>
+      <div className="section">
+        <h3>Steps</h3>
+        <ol className="steps-list">
+          {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
+        </ol>
+      </div>
 
       {isLoggedIn && user && user._id === recipe.creator?._id && (
         <div className="actions">
           <Link to={`/recipes/${recipeId}/edit`}>
-            <button>Edit</button>
+            <button className="btn-primary">Edit</button>
           </Link>
 
-          <button onClick={handleDelete}>Delete</button>
+          <button className="btn-secondary" onClick={handleDelete}>Delete</button>
         </div>
       )}
 
-      <hr />
+      <hr className="divider" />
 
-      <h2>Comments</h2>
+      <h2 className="comments-title">Comments</h2>
 
       {comments.length === 0 && <p>No comments yet.</p>}
 
       <div className="comments-container">
-        {comments.map((comment) => (
-          <Comment key={comment._id} comment={comment} />
-        ))}
-      </div>
+  {comments.map((comment) => (
+    <Comment
+      key={comment._id}
+      comment={comment}
+      onUpdated={(updated) =>
+        setComments((prev) =>
+          prev.map((c) => (c._id === updated._id ? updated : c))
+        )
+      }
+      onDeleted={(id) =>
+        setComments((prev) => prev.filter((c) => c._id !== id))
+      }
+    />
+  ))}
+</div>
+
 
       {isLoggedIn && (
         <div className="add-comment">
@@ -106,7 +124,7 @@ export default function RecipeDetails() {
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
           />
-          <button onClick={handleAddComment}>Add Comment</button>
+          <button className="btn-primary" onClick={handleAddComment}>Add Comment</button>
         </div>
       )}
 
