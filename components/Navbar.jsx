@@ -15,12 +15,7 @@ export default function Navbar() {
     <nav className="navbar">
 
       {/* Logo */}
-      <Link to="/" className="navbar-logo">
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Recipe_Unlimited_logo.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" 
-          alt="Logo" 
-        />
-      </Link>
+      <Link to="/">Home</Link>
 
       {/* Links */}
       <ul className="navbar-links">
@@ -37,12 +32,6 @@ export default function Navbar() {
             <li>
               <NavLink to="/register" className="nav-item">
                 Register
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/recipes" className="nav-item">
-                Recipes
               </NavLink>
             </li>
           </>

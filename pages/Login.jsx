@@ -12,7 +12,6 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     loginService({ username, password })
       .then((response) => {
         const token = response.data.authToken;

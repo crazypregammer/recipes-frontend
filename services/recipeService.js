@@ -14,15 +14,6 @@ const authHeaders = () => ({
   }
 });
 
-export const addCommentService = (id, text) => {
-  return axios.post(
-    `${API_URL}/${id}/comments`,
-    { text },
-    authHeaders()
-  );
-};
-
-
 // GET todas las recetas
 export const getRecipesService = () => {
   return axios.get(API_URL);

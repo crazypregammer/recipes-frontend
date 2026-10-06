@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getRecipeService, deleteRecipeService } from "../services/recipeService";
+import { getCommentsByRecipe, addCommentService } from "../services/commentService";
 import Comment from "../components/Comment";
 
 export default function RecipeDetails() {
@@ -10,17 +11,9 @@ export default function RecipeDetails() {
   const { isLoggedIn, user } = useContext(AuthContext);
 
   const [recipe, setRecipe] = useState(null);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
-
-  const handleAddComment = () => {
-    addCommentService(recipeId, newComment)
-      .then((res) => {
-        setRecipe(res.data); // actualiza la receta con el nuevo comentario
-        setNewComment("");
-      })
-      .catch((err) => console.log(err));
-  };
 
   useEffect(() => {
     getRecipeService(recipeId)
@@ -29,10 +22,25 @@ export default function RecipeDetails() {
         setLoading(false);
       })
       .catch((err) => console.log(err));
+
+    getCommentsByRecipe(recipeId)
+      .then((res) => setComments(res.data))
+      .catch((err) => console.log(err));
   }, [recipeId]);
 
+  const handleAddComment = () => {
+    if (!newComment.trim()) return;
+
+    addCommentService(recipeId, newComment)
+      .then((res) => {
+        setComments([...comments, res.data]);
+        setNewComment("");
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleDelete = () => {
-    const answer = confirm("Are you sure you want to delete this recipe?");
+    const answer = confirm("Are you sure?");
     if (!answer) return;
 
     deleteRecipeService(recipeId)
@@ -47,78 +55,60 @@ export default function RecipeDetails() {
     <div className="recipe-details">
 
       <h2>{recipe.title}</h2>
-      {/* Imagen */}
-      <img
-        src={recipe.img}
-        alt={recipe.title}
-        className="recipe-image"
-      />
 
-      {/* Título */}
+      <img src={recipe.img} alt={recipe.title} className="recipe-image" />
 
-      {/* Categoría y tiempo */}
       <div className="recipe-meta">
         <p><strong>Category:</strong> {recipe.category}</p>
         <p><strong>Time:</strong> {recipe.time}</p>
       </div>
 
-      {/* Autor */}
       {recipe.creator && (
-        <p>
-          <strong>Creator:</strong>{" "}
-          {recipe.creator.username || recipe.creator.email || "Unknown"}
-        </p>
+        <p><strong>Creator:</strong> {recipe.creator.username}</p>
       )}
 
-      {/* Fecha */}
-
-      {/* Ingredientes */}
       <h3>Ingredients</h3>
-      <ul className="ingredients-list">
-        {recipe.ingredients.map((ing, index) => (
-          <li key={index}>{ing}</li>
-        ))}
+      <ul>
+        {recipe.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
       </ul>
 
-      {/* Pasos */}
       <h3>Steps</h3>
-      <ol className="steps-list">
-        {recipe.steps.map((step, index) => (
-          <li key={index}>{step}</li>
-        ))}
+      <ol>
+        {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
       </ol>
 
-      {/* Acciones (solo si está logueado y es el creador) */}
       {isLoggedIn && user && user._id === recipe.creator?._id && (
         <div className="actions">
           <Link to={`/recipes/${recipeId}/edit`}>
             <button>Edit</button>
           </Link>
-          <div className="add-comment">
-    <textarea
-      value={newComment}
-      onChange={(e) => setNewComment(e.target.value)}
-      placeholder="Write a comment..."
-    />
 
-    <button onClick={handleAddComment}>Add Comment</button>
-  </div>
           <button onClick={handleDelete}>Delete</button>
         </div>
       )}
 
       <hr />
 
-      {/* Comentarios */}
       <h2>Comments</h2>
 
-      {recipe.comments?.length === 0 && <p>No comments yet.</p>}
+      {comments.length === 0 && <p>No comments yet.</p>}
 
       <div className="comments-container">
-        {recipe.comments?.map((comment) => (
+        {comments.map((comment) => (
           <Comment key={comment._id} comment={comment} />
         ))}
       </div>
+
+      {isLoggedIn && (
+        <div className="add-comment">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+          />
+          <button onClick={handleAddComment}>Add Comment</button>
+        </div>
+      )}
 
     </div>
   );
