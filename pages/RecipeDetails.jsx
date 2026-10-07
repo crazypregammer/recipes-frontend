@@ -93,7 +93,6 @@ export default function RecipeDetails() {
         </div>
       )}
 
-      <hr className="divider" />
 
       <h2 className="comments-title">Comments</h2>
 

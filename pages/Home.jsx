@@ -1,20 +1,20 @@
-import { Link } from "react-router-dom";
+import Carousel from "../components/Carousel";
 
 export default function Home() {
+  const images = [
+    "https://images.unsplash.com/photo-1499636136210-6f4ee915583e",
+    "https://images.unsplash.com/photo-1521302080391-cb1c5c0c6b0d",
+    "https://images.unsplash.com/photo-1505253716362-afaea1f6a6f2"
+  ];
+
   return (
-    <div className="home-container">
-      <h1 className="home-title">Welcome to RecipeHub</h1>
-      <p className="home-subtitle">Create, share and explore delicious recipes</p>
+    <div>
+      <Carousel images={images} />
 
-      <div className="home-buttons">
-        <Link to="/recipes">
-          <button className="btn-primary">View Recipes</button>
-        </Link>
-
-        <Link to="/register">
-          <button className="btn-secondary">Join Now</button>
-        </Link>
-      </div>
+      <h1>Bienvenida a RecipeHub 🌿</h1>
+      <p style={{ textAlign: "center" }}>
+        Recetas naturales, frescas y hechas con cariño.
+      </p>
     </div>
   );
 }

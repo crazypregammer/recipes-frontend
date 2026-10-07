@@ -49,7 +49,7 @@ export default function EditRecipe() {
     };
 
     editRecipeService(recipeId, updatedRecipe)
-      .then(() => navigate(`/recipes/${recipeId}`))
+      .then(() => navigate(`/recipes`))
       .catch((err) => console.log(err));
   };
 

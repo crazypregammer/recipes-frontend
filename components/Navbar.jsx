@@ -25,7 +25,7 @@ export default function Navbar() {
         {!isLoggedIn && (
           <>
             <li>
-              <NavLink to="/login" className="nav-item">
+              <NavLink to="/login">
                 Login
               </NavLink>
             </li>
@@ -41,9 +41,14 @@ export default function Navbar() {
         {isLoggedIn && (
           <>
             <li>
-              <NavLink to="/recipes" className="nav-item">
-                Recipes
-              </NavLink>
+              <NavLink
+  to="/recipes"
+  end
+  className={({isActive}) => isActive ? "active" : "normal"}
+>
+  Recipes
+</NavLink>
+
             </li>
 
             <li>

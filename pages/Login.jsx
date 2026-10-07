@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginService } from "../services/authService";
 import { AuthContext } from "../context/AuthContext";
 
@@ -51,6 +51,9 @@ export default function Login() {
           <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
       </form>
+      <div>
+        <p>Don't have an account? <Link to="/register">Register</Link></p>
+      </div>
     </div>
   );
 }

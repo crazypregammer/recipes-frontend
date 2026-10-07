@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { registerService } from "../services/authService";
 
 export default function Register() {
@@ -66,6 +66,7 @@ export default function Register() {
           <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
       </form>
+      <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   );
 }
