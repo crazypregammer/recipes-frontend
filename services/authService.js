@@ -13,12 +13,18 @@ export const loginService = async (userData) => {
 };
 
 // Verificar token
-export const verifyService = async () => {
+export const verifyService = () => {
   const storedToken = localStorage.getItem("authToken");
 
-  return axios.get(`${API_URL}/verify`, {
+  if (!storedToken) {
+    // ⬅ evita llamar al backend sin token
+    return Promise.reject("No token");
+  }
+
+  return axios.get("http://localhost:5005/api/auth/verify", {
     headers: {
-      Authorization: `Bearer ${storedToken}`,
-    },
+      Authorization: `Bearer ${storedToken}`
+    }
   });
 };
+

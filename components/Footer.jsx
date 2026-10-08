@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className="footer">
-      <p>RecipeHub · Todos los derechos reservados</p>
+      <p>RecipeHub · All rigths reserved</p>
     </footer>
   );
 }

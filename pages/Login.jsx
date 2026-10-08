@@ -17,6 +17,7 @@ export default function Login() {
       .then((response) => {
         const token = response.data.authToken;
         logInUser(token);
+        console.log("TOKEN GUARDADO:", token);
         navigate("/recipes");
       })
       .catch((error) => {

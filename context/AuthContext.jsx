@@ -9,27 +9,29 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const authenticateUser = () => {
-    const storedToken = localStorage.getItem("authToken");
+  const storedToken = localStorage.getItem("authToken");
 
-    if (!storedToken) {
+  if (!storedToken) {
+    setIsLoggedIn(false);
+    setUser(null);
+    setIsLoading(false);
+    return;
+  }
+
+  verifyService()
+    .then((response) => {
+      setIsLoggedIn(true);
+      setUser(response.data.user);
+      setIsLoading(false);
+    })
+    .catch(() => {
+      // ⬅ si no hay token o es inválido, NO es un error grave
       setIsLoggedIn(false);
       setUser(null);
       setIsLoading(false);
-      return;
-    }
+    });
+};
 
-    verifyService()
-      .then((response) => {
-        setIsLoggedIn(true);
-        setUser(response.data.user);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setUser(null);
-        setIsLoading(false);
-      });
-  };
 
   const logInUser = (token) => {
     localStorage.setItem("authToken", token);
@@ -42,8 +44,15 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+  const storedToken = localStorage.getItem("authToken");
+
+  if (storedToken) {
     authenticateUser();
-  }, []);
+  } else {
+    setIsLoading(false);
+  }
+}, []);
+
 
   return (
     <AuthContext.Provider
