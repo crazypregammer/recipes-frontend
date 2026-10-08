@@ -11,7 +11,35 @@ export default function CreateRecipe() {
   const [steps, setSteps] = useState("");
   const [category, setCategory] = useState("");
   const [time, setTime] = useState("");
+  const [uploading, setUploading] = useState(false);
 
+  // ⭐ SUBIR IMAGEN A CLOUDINARY
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("imageUrl", file);
+
+    setUploading(true);
+
+    try {
+      const res = await fetch("http://localhost:5005/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      setImg(data.imageUrl); // ← URL de Cloudinary
+    } catch (err) {
+      console.log(err);
+      alert("Error uploading image");
+    }
+
+    setUploading(false);
+  };
+
+  // ⭐ ENVIAR FORMULARIO
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -46,13 +74,10 @@ export default function CreateRecipe() {
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <label>Image URL</label>
-        <input
-          type="text"
-          value={img}
-          placeholder="https://example.com/image.jpg"
-          onChange={(e) => setImg(e.target.value)}
-        />
+        <label>Image</label>
+        <input type="file" name="imageUrl" onChange={handleImageUpload} />
+        {uploading && <p>Uploading image...</p>}
+        {img && <img src={img} alt="preview" width="150" />}
 
         <label>Category</label>
         <input
@@ -94,3 +119,6 @@ export default function CreateRecipe() {
     </div>
   );
 }
+
+
+

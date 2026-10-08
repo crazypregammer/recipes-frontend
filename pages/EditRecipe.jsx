@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getRecipeService, editRecipeService } from "../services/recipeService";
 
-
 export default function EditRecipe() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
@@ -13,8 +12,8 @@ export default function EditRecipe() {
   const [steps, setSteps] = useState("");
   const [category, setCategory] = useState("");
   const [time, setTime] = useState("");
-
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     getRecipeService(recipeId)
@@ -35,6 +34,32 @@ export default function EditRecipe() {
         setLoading(false);
       });
   }, [recipeId]);
+
+  // ⭐ SUBIR NUEVA IMAGEN
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("imageUrl", file);
+
+    setUploading(true);
+
+    try {
+      const res = await fetch("http://localhost:5005/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      setImg(data.imageUrl);
+    } catch (err) {
+      console.log(err);
+      alert("Error uploading image");
+    }
+
+    setUploading(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,27 +86,22 @@ export default function EditRecipe() {
 
       <form className="form" onSubmit={handleSubmit}>
 
-        <label>Image URL</label>
-        <input
-          type="text"
-          value={img}
-          placeholder="https://example.com/image.jpg"
-          onChange={(e) => setImg(e.target.value)}
-        />
-
         <label>Title</label>
         <input
           type="text"
           value={title}
-          placeholder="Chocolate Cake..."
           onChange={(e) => setTitle(e.target.value)}
         />
+
+        <label>Image</label>
+        <input type="file" name="imageUrl" onChange={handleImageUpload} />
+        {uploading && <p>Uploading image...</p>}
+        {img && <img src={img} alt="preview" width="150" />}
 
         <label>Category</label>
         <input
           type="text"
           value={category}
-          placeholder="Dessert, Italian..."
           onChange={(e) => setCategory(e.target.value)}
         />
 
@@ -89,22 +109,19 @@ export default function EditRecipe() {
         <input
           type="text"
           value={time}
-          placeholder="30 min"
           onChange={(e) => setTime(e.target.value)}
         />
 
-        <label>Ingredients (comma separated)</label>
+        <label>Ingredients</label>
         <input
           type="text"
           value={ingredients}
-          placeholder="Flour, Eggs, Sugar..."
           onChange={(e) => setIngredients(e.target.value)}
         />
 
-        <label>Steps (separated by periods)</label>
+        <label>Steps</label>
         <textarea
           value={steps}
-          placeholder="Mix ingredients. Bake for 20 minutes..."
           onChange={(e) => setSteps(e.target.value)}
         />
 
