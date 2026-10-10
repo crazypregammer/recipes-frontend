@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_URL } from "../config/config";
 
 export const registerService = (userData) =>
-  axios.post(`${API_URL}/api/authregister`, userData);
+  axios.post(`${API_URL}/api/auth/register`, userData);
 
 export const loginService = (userData) =>
   axios.post(`${API_URL}/api/auth/login`, userData);
