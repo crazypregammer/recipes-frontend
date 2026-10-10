@@ -1,18 +1,17 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:5005/api/comments";
+import { API_URL } from "../config/config";
 
 const getToken = () => localStorage.getItem("authToken");
 
 // Obtener comentarios de una receta
 export const getCommentsByRecipe = (recipeId) => {
-  return axios.get(`${API_URL}/recipe/${recipeId}`);
+  return axios.get(`${API_URL}/api/comments/recipe/${recipeId}`);
 };
 
 // Crear comentario
 export const addCommentService = (recipeId, text) => {
   return axios.post(
-    `${API_URL}/recipe/${recipeId}`,
+    `${API_URL}/api/comments/recipe/${recipeId}`,
     { text },
     {
       headers: {
@@ -25,7 +24,7 @@ export const addCommentService = (recipeId, text) => {
 // Editar comentario
 export const editCommentService = (commentId, text) => {
   return axios.put(
-    `${API_URL}/${commentId}`,
+    `${API_URL}/api/comments/${commentId}`,
     { text },
     {
       headers: {
@@ -37,7 +36,7 @@ export const editCommentService = (commentId, text) => {
 
 // Borrar comentario
 export const deleteCommentService = (commentId) => {
-  return axios.delete(`${API_URL}/${commentId}`, {
+  return axios.delete(`${API_URL}/api/comments/${commentId}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`
     }
