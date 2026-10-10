@@ -9,6 +9,7 @@ import Login from '../pages/Login'
 import RecipeDetailS from '../pages/RecipeDetails'
 import EditRecipe from '../pages/EditRecipe'
 import CreateRecipe from '../pages/CreateRecipe'
+import FavoritesPage from '../pages/FavoritesPage'
 
 export default function App() {
     return(
@@ -16,6 +17,7 @@ export default function App() {
             <Navbar />
             <main className='content'>
                 <Routes>
+                    <Route path='/favorites' element={<FavoritesPage />} />
                     <Route path='/' element={<Home />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />

@@ -1,16 +1,30 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-import { getRecipeService, deleteRecipeService } from "../services/recipeService";
-import { getCommentsByRecipe, addCommentService } from "../services/commentService";
+import {
+  likeRecipeService,
+  getRecipeService,
+  deleteRecipeService
+} from "../services/recipeService";
+
+import {
+  addFavoriteService,
+  removeFavoriteService
+} from "../services/userService";
+
+import {
+  getCommentsByRecipe,
+  addCommentService
+} from "../services/commentService";
 
 import Comment from "../components/Comment";
 
 export default function RecipeDetails() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
-  const { isLoggedIn, user } = useContext(AuthContext);
+
+  const { isLoggedIn, user, setUser, isLoading } = useContext(AuthContext);
 
   const [recipe, setRecipe] = useState(null);
   const [comments, setComments] = useState([]);
@@ -22,7 +36,6 @@ export default function RecipeDetails() {
       try {
         const recipeRes = await getRecipeService(recipeId);
         setRecipe(recipeRes.data);
-        console.log("RECIPE:", recipeRes.data);
 
         const commentsRes = await getCommentsByRecipe(recipeId);
         setComments(commentsRes.data);
@@ -36,12 +49,37 @@ export default function RecipeDetails() {
     fetchData();
   }, [recipeId]);
 
+  // ⭐ RETURNS ANTES DE CALCULAR FAVORITOS O DEFINIR HANDLERS
+  if (isLoading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!recipe) return <p>Recipe not found</p>;
+
+  // ⭐ FAVORITOS SIEMPRE DESPUÉS DE LOS RETURNS
+  const isFavorite = user?.favorites?.some(f => f._id.toString() === recipeId);
+  const hasLiked = user && recipe.likedBy?.some(
+  u => u.toString() === user._id.toString()
+);
+
+  const handleFavorite = () => {
+    if (!user) return alert("You must be logged in");
+
+    if (isFavorite) {
+      removeFavoriteService(user._id, recipeId)
+        .then(res => setUser(res.data.user))
+        .catch(err => console.log(err));
+    } else {
+      addFavoriteService(user._id, recipeId)
+        .then(res => setUser(res.data.user))
+        .catch(err => console.log(err));
+    }
+  };
+
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
 
     try {
       const res = await addCommentService(recipeId, newComment);
-      setComments((prev) => [...prev, res.data]);
+      setComments(prev => [...prev, res.data]);
       setNewComment("");
     } catch (err) {
       console.log(err);
@@ -59,9 +97,6 @@ export default function RecipeDetails() {
       console.log(err);
     }
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (!recipe) return <p>Recipe not found</p>;
 
   return (
     <div className="details-container">
@@ -99,22 +134,44 @@ export default function RecipeDetails() {
         </ol>
       </div>
 
+      <button
+  className="like-btn"
+  onClick={() => {
+    if (!user) {
+      alert("You must be logged in");
+      return;
+    }
+
+    likeRecipeService(recipeId)
+      .then(res => setRecipe(res.data))
+      .catch(err => console.log(err));
+  }}
+>
+  ❤️ {recipe.likes}
+</button>
+
+
+
+      <button className="fav-btn" onClick={handleFavorite}>
+        {isFavorite ? "★ Saved" : "☆ Save"}
+      </button>
+
       <h2 className="comments-title">Comments</h2>
 
       {comments.length === 0 && <p>No comments yet.</p>}
 
       <div className="comments-container">
-        {comments.map((comment) => (
+        {comments.map(comment => (
           <Comment
             key={comment._id}
             comment={comment}
-            onUpdated={(updated) =>
-              setComments((prev) =>
-                prev.map((c) => (c._id === updated._id ? updated : c))
+            onUpdated={updated =>
+              setComments(prev =>
+                prev.map(c => (c._id === updated._id ? updated : c))
               )
             }
-            onDeleted={(id) =>
-              setComments((prev) => prev.filter((c) => c._id !== id))
+            onDeleted={id =>
+              setComments(prev => prev.filter(c => c._id !== id))
             }
           />
         ))}
@@ -124,7 +181,7 @@ export default function RecipeDetails() {
         <div className="add-comment">
           <textarea
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={e => setNewComment(e.target.value)}
             placeholder="Write a comment..."
           />
           <button className="btn-primary" onClick={handleAddComment}>

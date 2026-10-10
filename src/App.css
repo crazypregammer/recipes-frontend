@@ -84,6 +84,60 @@ h1 {
   gap: 20px;
 }
 
+
+.like-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.like-btn:hover {
+  transform: scale(1.2);
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #ffcc00;
+  transition: transform 0.2s;
+}
+
+.fav-btn:hover {
+  transform: scale(1.2);
+}
+
+
+.search-bar {
+  justify-self: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.search-bar button {
+  padding: 8px 14px;
+  background: #ff7f50;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background: #ff5722;
+}
+
+
 /* CARDS */
 .recipe-card-wrapper {
   text-align: center;
@@ -117,6 +171,7 @@ h1 {
   object-fit: cover;
   transition: opacity 0.4s ease-in-out;
 }
+
 
 /* Botones del carrusel */
 .carousel-btn {

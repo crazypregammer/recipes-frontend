@@ -2,39 +2,35 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5005/api/recipes";
 
-// Obtener token
-const getToken = () => {
-  return localStorage.getItem("authToken");
-};
-
-// Configurar headers
+const getToken = () => localStorage.getItem("authToken");
 const authHeaders = () => ({
-  headers: {
-    Authorization: `Bearer ${getToken()}`
-  }
+  headers: { Authorization: `Bearer ${getToken()}` }
 });
 
-// GET todas las recetas
-export const getRecipesService = () => {
-  return axios.get(API_URL);
-};
+export const likeRecipeService = (id) =>
+  axios.post(`${API_URL}/${id}/like`, null, authHeaders());
 
-// GET una receta por ID
-export const getRecipeService = (id) => {
-  return axios.get(`${API_URL}/${id}`);
-};
 
-// POST crear receta
-export const createRecipeService = (recipeData) => {
-  return axios.post(API_URL, recipeData, authHeaders());
-};
+// BUSCADOR
+export const searchRecipesService = (params) =>
+  axios.get(`${API_URL}/search`, { params });
 
-// PUT editar receta
-export const editRecipeService = (id, recipeData) => {
-  return axios.put(`${API_URL}/${id}`, recipeData, authHeaders());
-};
+// GET todas
+export const getRecipesService = () =>
+  axios.get(API_URL);
 
-// DELETE borrar receta
-export const deleteRecipeService = (id) => {
-  return axios.delete(`${API_URL}/${id}`, authHeaders());
-};
+// GET una
+export const getRecipeService = (id) =>
+  axios.get(`${API_URL}/${id}`);
+
+// Crear
+export const createRecipeService = (recipeData) =>
+  axios.post(API_URL, recipeData, authHeaders());
+
+// Editar
+export const editRecipeService = (id, recipeData) =>
+  axios.put(`${API_URL}/${id}`, recipeData, authHeaders());
+
+// Borrar
+export const deleteRecipeService = (id) =>
+  axios.delete(`${API_URL}/${id}`, authHeaders());

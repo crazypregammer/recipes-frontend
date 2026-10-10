@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import RecipeCard from "../components/RecipeCard";
 import { AuthContext } from "../context/AuthContext";
 import { deleteRecipeService, getRecipesService } from "../services/recipeService";
+import SearchBar from "../components/SearchBar";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([]);
@@ -28,7 +29,7 @@ export default function Recipes() {
   return (
     <div className="recipes-page">
       <h1 className="recipes-title">Recipes</h1>
-
+    <SearchBar setRecipes={setRecipes} />
       <div className="recipes-grid">
         {recipes.map((recipe) => (
           <div key={recipe._id} className="recipe-card-wrapper">
