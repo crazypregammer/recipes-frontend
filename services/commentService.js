@@ -5,13 +5,13 @@ const getToken = () => localStorage.getItem("authToken");
 
 // Obtener comentarios de una receta
 export const getCommentsByRecipe = (recipeId) => {
-  return axios.get(`${API_URL}/api/comments/recipe/${recipeId}`);
+  return axios.get(`${API_URL}/comments/recipe/${recipeId}`);
 };
 
 // Crear comentario
 export const addCommentService = (recipeId, text) => {
   return axios.post(
-    `${API_URL}/api/comments/recipe/${recipeId}`,
+    `${API_URL}/comments/recipe/${recipeId}`,
     { text },
     {
       headers: {
@@ -24,7 +24,7 @@ export const addCommentService = (recipeId, text) => {
 // Editar comentario
 export const editCommentService = (commentId, text) => {
   return axios.put(
-    `${API_URL}/api/comments/${commentId}`,
+    `${API_URL}/comments/${commentId}`,
     { text },
     {
       headers: {
@@ -36,7 +36,7 @@ export const editCommentService = (commentId, text) => {
 
 // Borrar comentario
 export const deleteCommentService = (commentId) => {
-  return axios.delete(`${API_URL}/api/comments/${commentId}`, {
+  return axios.delete(`${API_URL}/comments/${commentId}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`
     }
