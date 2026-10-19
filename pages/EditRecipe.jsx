@@ -6,7 +6,7 @@ export default function EditRecipe() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
 
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState(null);   // ⭐ corregido
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
@@ -20,7 +20,7 @@ export default function EditRecipe() {
       .then((res) => {
         const recipe = res.data;
 
-        setImg(recipe.img);
+        setImg(recipe.img || null);   // ⭐ evita src=""
         setTitle(recipe.title);
         setIngredients(recipe.ingredients.join(", "));
         setSteps(recipe.steps.join(". "));
@@ -41,7 +41,7 @@ export default function EditRecipe() {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("imageUrl", file);
+    formData.append("file", file);
 
     setUploading(true);
 
@@ -63,6 +63,19 @@ export default function EditRecipe() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // ⭐ VALIDACIÓN REAL
+    if (
+      !title.trim() ||
+      !img ||
+      !category.trim() ||
+      !time.trim() ||
+      ingredients.split(",").map(i => i.trim()).filter(i => i !== "").length === 0 ||
+      steps.split(".").map(s => s.trim()).filter(s => s !== "").length === 0
+    ) {
+      alert("All fields are required");
+      return;
+    }
 
     const updatedRecipe = {
       img,
@@ -96,7 +109,7 @@ export default function EditRecipe() {
         <label>Image</label>
         <input type="file" name="imageUrl" onChange={handleImageUpload} />
         {uploading && <p>Uploading image...</p>}
-        {img && <img src={img} alt="preview" width="150" />}
+        {img && <img src={img} alt="preview" width="150" />}  {/* ⭐ seguro */}
 
         <label>Category</label>
         <input

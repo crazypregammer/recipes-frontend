@@ -18,6 +18,10 @@ nav {
   height: 60px;
 }
 
+.active {
+  text-decoration: underline;  
+}
+
 nav ul {
   padding: 0;
   display: flex;

@@ -6,7 +6,7 @@ export default function CreateRecipe() {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState(null);
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
   const [category, setCategory] = useState("");
@@ -15,34 +15,45 @@ export default function CreateRecipe() {
 
   // ⭐ SUBIR IMAGEN A CLOUDINARY
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append("imageUrl", file);
+  const formData = new FormData();
+  formData.append("file", file); // 🔥 nombre correcto
 
-    setUploading(true);
+  setUploading(true);
 
-    try {
-      const res = await fetch("http://localhost:5005/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+  try {
+    const res = await fetch("http://localhost:5005/api/upload", {
+      method: "POST",
+      body: formData,
+    });
 
-      const data = await res.json();
-      setImg(data.imageUrl); // ← URL de Cloudinary
-    } catch (err) {
-      console.log(err);
-      alert("Error uploading image");
-    }
+    const data = await res.json();
+    setImg(data.imageUrl); // secure_url de Cloudinary
+  } catch (err) {
+    console.log(err);
+    alert("Error uploading image");
+  }
 
-    setUploading(false);
-  };
+  setUploading(false);
+};
+
 
   // ⭐ ENVIAR FORMULARIO
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (
+      !title.trim() ||
+      !img ||
+      !category.trim() ||
+      !time.trim() ||
+      ingredients.split(",").map(i => i.trim()).filter(i => i !== "").length === 0 ||
+      steps.split(".").map(s => s.trim()).filter(s => s !== "").length === 0
+    ) {
+      alert("All fields are required");
+      return;
+    }
     const recipeData = {
       title,
       img,

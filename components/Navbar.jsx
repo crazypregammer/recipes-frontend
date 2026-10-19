@@ -16,7 +16,7 @@ export default function Navbar() {
 
       {/* Logo */}
       <Link to="/" className="navbar-logo">
-        RecipeHub
+        Home
       </Link>
 
       {/* Links */}

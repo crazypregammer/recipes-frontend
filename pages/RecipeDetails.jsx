@@ -1,11 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 import {
   likeRecipeService,
   getRecipeService,
-  deleteRecipeService
 } from "../services/recipeService";
 
 import {
@@ -22,7 +21,6 @@ import Comment from "../components/Comment";
 
 export default function RecipeDetails() {
   const { recipeId } = useParams();
-  const navigate = useNavigate();
 
   const { isLoggedIn, user, setUser, isLoading } = useContext(AuthContext);
 
@@ -56,9 +54,7 @@ export default function RecipeDetails() {
 
   // ⭐ FAVORITOS SIEMPRE DESPUÉS DE LOS RETURNS
   const isFavorite = user?.favorites?.some(f => f._id.toString() === recipeId);
-  const hasLiked = user && recipe.likedBy?.some(
-  u => u.toString() === user._id.toString()
-);
+  
 
   const handleFavorite = () => {
     if (!user) return alert("You must be logged in");
@@ -81,18 +77,6 @@ export default function RecipeDetails() {
       const res = await addCommentService(recipeId, newComment);
       setComments(prev => [...prev, res.data]);
       setNewComment("");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleDelete = async () => {
-    const answer = confirm("Are you sure?");
-    if (!answer) return;
-
-    try {
-      await deleteRecipeService(recipeId);
-      navigate("/recipes");
     } catch (err) {
       console.log(err);
     }
