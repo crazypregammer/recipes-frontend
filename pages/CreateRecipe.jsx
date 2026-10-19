@@ -24,7 +24,7 @@ export default function CreateRecipe() {
   setUploading(true);
 
   try {
-    const res = await fetch("http://localhost:5005/api/upload", {
+    const res = await fetch("https://tu-backend.onrender.com/api/upload", {
       method: "POST",
       body: formData,
     });
